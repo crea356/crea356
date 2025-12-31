@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Tasks</title>
+    <link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Spline Sans';
+            background: #EDF8E1;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .user-greeting {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(-20deg, #6f55ac 0%, #EDF8E1 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .greeting-text h3 {
+            font-size: 14px;
+            color: #0e150c;
+            font-weight: 400;
+        }
+
+        .greeting-text h2 {
+            font-size: 20px;
+            color: #a180ef;
+            font-weight: 600;
+        }
+
+        .page-title {
+            font-size: 26px;
+            font-weight: 700;
+            color: #113213;
+            word-spacing: 0.2rem;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .filter-btn {
+            padding: 10px 24px;
+            border: 2px solid #333;
+            background: white;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #333;
+        }
+
+        .filter-btn.active {
+            background: #2bee5f;
+            border-color: #2bee5f;
+            color: white;
+        }
+
+        .filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 16px;
+            margin-top: 32px;
+        }
+
+        .section-title:first-of-type {
+            margin-top: 0;
+        }
+
+        .tasks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .task-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .task-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .task-card.completed {
+            opacity: 0.7;
+            background: #f5f5f5;
+        }
+
+        .checkbox {
+            width: 22px;
+            height: 22px;
+            border: 2px solid #ccc;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .checkbox.checked {
+            background: #66bb6a;
+            border-color: #66bb6a;
+        }
+
+        .checkbox.checked::after {
+            content: '✓';
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .task-content {
+            flex: 1;
+        }
+
+        .task-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 4px;
+
+        }
+
+        .task-card.completed .task-title {
+            text-decoration: line-through;
+            color: #999;
+        }
+
+        .task-description {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .task-card.completed .task-description {
+            color: #999;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+
+            .page-title {
+                font-size: 24px;
+            }
+
+            .tasks-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-around;
+            background-color: #fff;
+            border-top: 1px solid #e0e0e0;
+            padding: 12px 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .bottom-nav a {
+            text-align: center;
+            font-size: 12px;
+            color: #888;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .bottom-nav a .material-symbols-outlined {
+            font-size: 24px;
+        }
+
+        .bottom-nav a:hover {
+            color: #055009;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="user-greeting">
+                <div class="avatar">S</div>
+                <div class="greeting-text">
+                    <h3>What's new !! </h3>
+                    <h2 id="userNameDisplay">User</h2>
+                </div>
+            </div>
+            <h1 class="page-title">My Tasks <i class="fa-solid fa-list-check"></i></h1>
+        </div>
+
+        <div class="filter-buttons" id="filterContainer">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="work">Work</button>
+            <button class="filter-btn" data-filter="personal">Personal</button>
+            <button class="filter-btn" data-filter="study">Study</button>
+        </div>
+
+        <div id="tasksContainer">
+            <h2 class="section-title">Today</h2>
+            <div class="tasks-grid" id="todayTasks">
+                <!-- Tasks will be loaded here -->
+            </div>
+
+            <h2 class="section-title">Upcoming</h2>
+            <div class="tasks-grid" id="upcomingTasks">
+                <!-- Tasks will be loaded here -->
+            </div>
+        </div>
+    </div>
+    <div class="bottom-nav">
+        <a href="dashboard.html" class="active">
+            <span class="material-symbols-outlined">home</span>
+            Home
+        </a>
+        <a href="mytask.html">
+            <span class="material-symbols-outlined">task_alt</span>
+            Tasks
+        </a>
+        <a href="create.html">
+            <span class="material-symbols-outlined">add_circle</span>
+            Add
+        </a>
+        <a href="profile.html" class="active">
+            <span class="material-symbols-outlined">person</span>
+            Profile
+        </a>
+    </div>
+
+    <script>
+        let allTasksData = [];
+
+        async function fetchTasks() {
+            try {
+                const response = await fetch('get_tasks.php');
+                const data = await response.json();
+
+                if (data.success) {
+                    allTasksData = data.tasks;
+                    renderTasks('all');
+                }
+            } catch (error) {
+                console.error('Error fetching tasks:', error);
+            }
+        }
+
+        function renderTasks(filter = 'all') {
+            const todayTasks = document.getElementById('todayTasks');
+            const upcomingTasks = document.getElementById('upcomingTasks');
+
+            todayTasks.innerHTML = '';
+            upcomingTasks.innerHTML = '';
+
+            const today = new Date().toISOString().split('T')[0];
+
+            const filteredTasks = filter === 'all'
+                ? allTasksData
+                : allTasksData.filter(t => t.category === filter);
+
+            if (filteredTasks.length === 0) {
+                todayTasks.innerHTML = '<p style="padding: 20px; color: #666;">No tasks found.</p>';
+            }
+
+            filteredTasks.forEach(task => {
+                const taskCard = document.createElement('div');
+                taskCard.className = `task-card ${task.status === 'completed' ? 'completed' : ''}`;
+                taskCard.setAttribute('data-id', task.id);
+                taskCard.setAttribute('data-category', task.category);
+
+                const parts = task.due_date ? task.due_date.split(' ') : [];
+                const taskDate = parts[0] || '';
+                const taskTime = parts[1] ? parts[1].slice(0, 5) : '';
+
+                taskCard.innerHTML = `
+                    <div class="checkbox ${task.status === 'completed' ? 'checked' : ''}" onclick="toggleTaskStatus(${task.id}, '${task.status}')"></div>
+                    <div class="task-content">
+                        <div class="task-title">${task.title}</div>
+                        <div class="task-description">${task.description}</div>
+                        <div style="font-size: 11px; margin-top: 5px; color: #888;">${task.category.toUpperCase()} • ${taskDate} ${taskTime !== '00:00' ? 'at ' + taskTime : ''}</div>
+                    </div>
+                `;
+
+                if (taskDate <= today) {
+                    todayTasks.appendChild(taskCard);
+                } else {
+                    upcomingTasks.appendChild(taskCard);
+                }
+            });
+        }
+
+        async function toggleTaskStatus(taskId, currentStatus) {
+            const newStatus = currentStatus === 'pending' ? 'completed' : 'pending';
+            try {
+                const response = await fetch('update_task_status.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ task_id: taskId, status: newStatus })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    // Update local data and re-render
+                    const taskIndex = allTasksData.findIndex(t => t.id == taskId);
+                    if (taskIndex > -1) {
+                        allTasksData[taskIndex].status = newStatus;
+                        renderTasks(document.querySelector('.filter-btn.active').dataset.filter);
+                    }
+                }
+            } catch (error) {
+                console.error('Error updating task:', error);
+            }
+        }
+
+        // Filter functionality
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                renderTasks(button.dataset.filter);
+            });
+        });
+
+        async function checkAuth() {
+            try {
+                const response = await fetch('check_auth.php');
+                const data = await response.json();
+
+                if (data.authenticated) {
+                    if (data.user && data.user.full_name) {
+                        document.getElementById('userNameDisplay').textContent = data.user.full_name;
+                    }
+                    fetchTasks();
+                } else {
+                    window.location.href = 'logintask.html';
+                }
+            } catch (error) {
+                console.error('Auth check failed:', error);
+                window.location.href = 'logintask.html';
+            }
+        }
+
+        // Load data on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+        });
+    </script>
+</body>
+
+</html>

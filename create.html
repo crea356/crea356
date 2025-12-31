@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Task</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Spline Sans', sans-serif;
+            background: #808080;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .modal-container {
+            background: #EDF8E1;
+            width: 100%;
+            max-width: 350px;
+            border-radius: 25px 25px 0 0;
+            padding: 10px 0 0 0;
+            box-shadow: 0 -5px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-handle {
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(-190deg, #EDF8E1 40%, #fff8ef 80%);
+            border-radius: 3px;
+            margin: 0 auto 25px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 25px 20px;
+        }
+
+        .modal-header h1 {
+            font-size: 26px;
+            font-weight: 700;
+            color: #0d341d;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 32px;
+            cursor: pointer;
+            padding: 0;
+            color: #0d341b;
+            line-height: 1;
+            font-weight: 300;
+        }
+
+        .modal-content {
+            padding: 0 25px 25px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 16px;
+            font-weight: 600;
+            color: #0d1b34;
+            margin-bottom: 10px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 18px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-family: 'Spline Sans', sans-serif;
+            background: white;
+            color: #0d1b34;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .form-group textarea {
+            width: 100%;
+            padding: 18px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-family: 'Spline Sans', sans-serif;
+            background: white;
+            color: #0d3428;
+            resize: vertical;
+            min-height: 140px;
+            box-shadow: 0 2px 8px rgba(28, 45, 40, 0.05);
+        }
+
+        .date-time-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .date-time-btn {
+            background: white;
+            border: none;
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .date-time-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .icon-wrapper {
+            width: 48px;
+            height: 48px;
+            background: #e8eaf6;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .date-time-info {
+            text-align: left;
+            flex: 1;
+        }
+
+        .date-time-label {
+            font-size: 12px;
+            color: #6b7280;
+            margin-bottom: 2px;
+        }
+
+        .date-time-value {
+            font-size: 15px;
+            font-weight: 600;
+            color: #0d1b34;
+        }
+
+        .priority-group {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .priority-btn {
+            background: white;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 18px 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Spline Sans', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .priority-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .priority-icon {
+            font-size: 32px;
+        }
+
+        .priority-label {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .priority-btn[data-priority="low"] .priority-icon,
+        .priority-btn[data-priority="low"] .priority-label {
+            color: #6b7280;
+        }
+
+        .priority-btn[data-priority="low"].active {
+            border-color: #6b7280;
+        }
+
+        .priority-btn[data-priority="medium"] .priority-icon,
+        .priority-btn[data-priority="medium"] .priority-label {
+            color: #39dc36;
+        }
+
+        .priority-btn[data-priority="medium"].active {
+            border-color: #39dc36;
+        }
+
+        .priority-btn[data-priority="high"] .priority-icon,
+        .priority-btn[data-priority="high"] .priority-label {
+            color: #ff4d4d;
+        }
+
+        .priority-btn[data-priority="high"].active {
+            border-color: #ff4d4d;
+        }
+
+        .modal-actions {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        .cancel-btn {
+            padding: 18px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            background: white;
+            color: #0d1b34;
+            font-family: 'Spline Sans', sans-serif;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .cancel-btn:hover {
+            transform: translateY(-2px);
+            color: white;
+            background-color: rgb(238, 72, 72);
+            box-shadow: 0 4px 12px rgba(233, 122, 122, 0.849);
+        }
+
+        .save-btn {
+            padding: 18px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            background: white;
+            color: rgb(34, 29, 29);
+            font-family: 'Spline Sans', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .save-btn:hover {
+            transform: translateY(-2px);
+            background: #115b0c;
+            color: white;
+            box-shadow: 0 10px 25px rgba(91, 249, 154, 0.4);
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 0;
+            }
+
+            .modal-container {
+                max-width: 100%;
+                border-radius: 0;
+            }
+
+            .modal-content,
+            .modal-header {
+                padding: 0 20px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="modal-container">
+        <div class="modal-handle"></div>
+
+        <div class="modal-header">
+            <h1>Create Task</h1>
+            <button class="close-btn" id="closeBtn">✕</button>
+        </div>
+
+        <div class="modal-content">
+            <form id="taskForm">
+                <div class="form-group">
+                    <label>Task Title</label>
+                    <input type="text" id="taskTitle" placeholder="What needs to be done?" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="taskDescription" placeholder="Add description..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Due Date</label>
+                    <div class="date-time-group">
+                        <div style="position: relative; width: 100%;">
+                            <input type="date" id="dateInput"
+                                style="position: absolute; width: 0; height: 0; opacity: 0; border: 0; padding: 0; pointer-events: none;">
+                            <label for="dateInput" class="date-time-btn" id="dateBtn"
+                                style="width: 100%; display: flex; cursor: pointer;">
+                                <div class="icon-wrapper"><i class="fa-regular fa-calendar-days"></i></div>
+                                <div class="date-time-info">
+                                    <div class="date-time-label">Date</div>
+                                    <div class="date-time-value" id="dateValue">Today</div>
+                                </div>
+                            </label>
+                        </div>
+                        <div style="position: relative; width: 100%;">
+                            <input type="time" id="timeInput"
+                                style="position: absolute; width: 0; height: 0; opacity: 0; border: 0; padding: 0; pointer-events: none;">
+                            <label for="timeInput" class="date-time-btn" id="timeBtn"
+                                style="width: 100%; display: flex; cursor: pointer;">
+                                <div class="icon-wrapper"><i class="fa-solid fa-clock"></i></div>
+                                <div class="date-time-info">
+                                    <div class="date-time-label">Time</div>
+                                    <div class="date-time-value" id="timeValue">Set Time</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Category</label>
+                    <div class="priority-group" id="categoryGroup">
+                        <button type="button" class="priority-btn active" data-category="personal">
+                            <div class="priority-icon"><i class="fa-solid fa-user"></i></div>
+                            <div class="priority-label">Personal</div>
+                        </button>
+                        <button type="button" class="priority-btn" data-category="work">
+                            <div class="priority-icon"><i class="fa-solid fa-briefcase"></i></div>
+                            <div class="priority-label">Work</div>
+                        </button>
+                        <button type="button" class="priority-btn" data-category="study">
+                            <div class="priority-icon"><i class="fa-solid fa-book"></i></div>
+                            <div class="priority-label">Study</div>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Priority</label>
+                    <div class="priority-group" id="priorityGroup">
+                        <button type="button" class="priority-btn" data-priority="low">
+                            <div class="priority-icon"><i class="fa-solid fa-fire"></i></div>
+                            <div class="priority-label">Low</div>
+                        </button>
+                        <button type="button" class="priority-btn active" data-priority="medium">
+                            <div class="priority-icon"><i class="fa-solid fa-fire"></i></div>
+                            <div class="priority-label">Medium</div>
+                        </button>
+                        <button type="button" class="priority-btn" data-priority="high">
+                            <div class="priority-icon"><i class="fa-solid fa-fire"></i></div>
+                            <div class="priority-label">High</div>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="cancel-btn" id="cancelBtn">Cancel</button>
+                    <button type="submit" class="save-btn">
+                        <span>✓</span>
+                        <span>Save Task</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const dateInput = document.getElementById('dateInput');
+        const dateValue = document.getElementById('dateValue');
+        const timeInput = document.getElementById('timeInput');
+        const timeValue = document.getElementById('timeValue');
+
+        // Help trigger picker for modern browsers
+        document.getElementById('dateBtn').addEventListener('click', () => {
+            if (dateInput.showPicker) dateInput.showPicker();
+        });
+        document.getElementById('timeBtn').addEventListener('click', () => {
+            if (timeInput.showPicker) timeInput.showPicker();
+        });
+
+        dateInput.addEventListener('change', () => {
+            dateValue.textContent = dateInput.value || 'Today';
+        });
+
+        timeInput.addEventListener('change', () => {
+            timeValue.textContent = timeInput.value || 'Set Time';
+        });
+
+        const categoryBtns = document.querySelectorAll('#categoryGroup .priority-btn');
+        categoryBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                categoryBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+
+        const priorityBtns = document.querySelectorAll('#priorityGroup .priority-btn');
+        priorityBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                priorityBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+
+        const taskForm = document.getElementById('taskForm');
+        taskForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const title = document.getElementById('taskTitle').value;
+            const description = document.getElementById('taskDescription').value;
+            const priority = document.querySelector('#priorityGroup .priority-btn.active').dataset.priority;
+            const category = document.querySelector('#categoryGroup .priority-btn.active').dataset.category;
+            const dueDate = dateInput.value || new Date().toISOString().split('T')[0];
+
+            try {
+                const response = await fetch('create_task.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        title, description, priority, category,
+                        due_date: dueDate,
+                        due_time: timeInput.value || '00:00:00'
+                    })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    window.location.href = 'mytask.html';
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            } catch (error) {
+                alert('An error occurred. Please try again.');
+            }
+        });
+
+        document.getElementById('closeBtn').addEventListener('click', () => {
+            window.location.href = 'dashboard.html';
+        });
+
+        document.getElementById('cancelBtn').addEventListener('click', () => {
+            if (confirm('Are you sure you want to cancel?')) {
+                taskForm.reset();
+                priorityBtns.forEach(b => b.classList.remove('active'));
+                document.querySelector('.priority-btn[data-priority="medium"]').classList.add('active');
+                dateValue.textContent = 'Today';
+                timeValue.textContent = 'Set Time';
+            }
+        });
+    </script>
+</body>
+
+</html>

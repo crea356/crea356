@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Spline Sans', sans-serif;
+            background: #EDF8E1;
+            color: #100d1b;
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .greeting-text h2 {
+            color: #0c1e0c;
+            font-size: 1.6rem;
+            font-weight: 700;
+            word-spacing: 0.3rem;
+            margin-bottom: 20px;
+            padding-left: 13px;
+        }
+
+        .page-title {
+            color: #0c1e0c;
+            font-size: 1.6rem;
+            font-weight: 700;
+            word-spacing: 0.3rem;
+            margin-bottom: 20px;
+            padding-right: 13px;
+        }
+
+        /* Quick Stats */
+        .stats {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            min-width: 140px;
+            background-color: #fff;
+            padding: 18px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            flex-shrink: 0;
+            transition: transform 0.2s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .stat-card .icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .stat-card h3 {
+            margin: 5px 0 3px;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .stat-card p {
+            margin: 0;
+            color: #666;
+            font-size: 13px;
+        }
+
+        /* Filter Buttons */
+        .filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: 'Spline Sans', sans-serif;
+            background-color: #fff;
+            color: #666;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .filter-btn.active {
+            background-color: #2bee5f;
+            color: white;
+        }
+
+        .filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Section Title */
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #100d1b;
+            margin-bottom: 15px;
+            margin-top: 30px;
+        }
+
+        .section-title:first-of-type {
+            margin-top: 0;
+        }
+
+        /* Task List */
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .task-card {
+            display: flex;
+            align-items: center;
+            background-color: #fff;
+            padding: 18px;
+            border-radius: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .task-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .task-card.completed {
+            opacity: 0.6;
+        }
+
+        .checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #ccc;
+            border-radius: 50%;
+            margin-right: 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+            background-color: #fff;
+        }
+
+        .checkbox:hover {
+            border-color: #66bb6a;
+        }
+
+        .checkbox.checked {
+            background-color: #66bb6a;
+            border-color: #66bb6a;
+        }
+
+        .checkbox.checked::after {
+            content: '✓';
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .task-content {
+            flex: 1;
+        }
+
+        .task-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #100d1b;
+            margin-bottom: 4px;
+        }
+
+        .task-card.completed .task-title {
+            text-decoration: line-through;
+            color: #999;
+        }
+
+        .task-description {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .task-card.completed .task-description {
+            color: #999;
+        }
+
+        .task-tag {
+            margin-left: auto;
+            padding: 5px 12px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            flex-shrink: 0;
+        }
+
+        .tag-work {
+            background-color: #D0E7FF;
+            color: #149255;
+        }
+
+        .tag-personal {
+            background-color: #D7FFD0;
+            color: #2AA800;
+        }
+
+        .tag-study {
+            background-color: #F0D0FF;
+            color: #8B2AA8;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-around;
+            background-color: #fff;
+            border-top: 1px solid #e0e0e0;
+            padding: 12px 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .bottom-nav a {
+            text-align: center;
+            font-size: 12px;
+            color: #888;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .bottom-nav a .material-symbols-outlined {
+            font-size: 24px;
+        }
+
+        .bottom-nav a.active {
+            color: #055009;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .page-title {
+                font-size: 24px;
+            }
+
+            .stats {
+                gap: 10px;
+            }
+
+            .stat-card {
+                min-width: 120px;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="greeting-text">
+                <h2> Good Morning , <span id="userNameDisplay" style="color:#a180ef; font-weight:bolder;"> User
+                        !!</span></h2>
+            </div>
+            <h1 class="page-title">Dashboard <i class="fa-brands fa-deezer"></i></h1>
+        </header>
+
+        <!-- Quick Stats -->
+        <div class="stats">
+            <div class="stat-card">
+                <div class="icon"><i class="fa-regular fa-circle-check"></i></div>
+                <h3 id="completedCount">1</h3>
+                <p>Completed</p>
+            </div>
+            <div class="stat-card">
+                <div class="icon"><i class="fa-solid fa-hourglass-half"></i></div>
+                <h3 id="pendingCount">4</h3>
+                <p>Pending</p>
+            </div>
+            <div class="stat-card">
+                <div class="icon"><i class="fa-solid fa-chart-line"></i></div>
+                <h3 id="velocityCount">0 pts</h3>
+                <p>Velocity (7d)</p>
+            </div>
+        </div>
+
+        <!-- Filter Buttons -->
+        <div class="filters">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="work">Work</button>
+            <button class="filter-btn" data-filter="personal">Personal</button>
+            <button class="filter-btn" data-filter="study">Study</button>
+        </div>
+
+        <!-- Today Section -->
+        <h2 class="section-title">Today</h2>
+        <div class="task-list" id="todayTasks">
+            <!-- Tasks will be loaded here -->
+        </div>
+
+        <!-- Upcoming Section -->
+        <h2 class="section-title">Upcoming</h2>
+        <div class="task-list" id="upcomingTasks">
+            <!-- Tasks will be loaded here -->
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <a href="dashboard.html" class="active">
+            <span class="material-symbols-outlined">home</span>
+            Home
+        </a>
+        <a href="mytask.html">
+            <span class="material-symbols-outlined">task_alt</span>
+            Tasks
+        </a>
+        <a href="create.html">
+            <span class="material-symbols-outlined">add_circle</span>
+            Add
+        </a>
+        <a href="profile.html">
+            <span class="material-symbols-outlined">person</span>
+            Profile
+        </a>
+
+    </div>
+
+    <script>
+        let allTasksData = [];
+
+        async function fetchTasks() {
+            try {
+                const response = await fetch('get_tasks.php');
+                const data = await response.json();
+
+                if (data.success) {
+                    allTasksData = data.tasks;
+                    renderTasks('all');
+                }
+            } catch (error) {
+                console.error('Error fetching tasks:', error);
+            }
+        }
+
+        function renderTasks(filter = 'all') {
+            const todayTasks = document.getElementById('todayTasks');
+            const upcomingTasks = document.getElementById('upcomingTasks');
+
+            todayTasks.innerHTML = '';
+            upcomingTasks.innerHTML = '';
+
+            const now = new Date();
+            const todayDateStr = now.toISOString().split('T')[0];
+            const tomorrow = new Date(now);
+            tomorrow.setDate(now.getDate() + 1);
+            const tomorrowDateStr = tomorrow.toISOString().split('T')[0];
+
+            const filteredTasks = filter === 'all'
+                ? allTasksData
+                : allTasksData.filter(t => t.category === filter);
+
+            // Group tasks for better display
+            const sections = {
+                today: [],
+                tomorrow: [],
+                upcoming: []
+            };
+
+            filteredTasks.forEach(task => {
+                const parts = task.due_date ? task.due_date.split(' ') : [];
+                const taskDate = parts[0] || '';
+
+                if (taskDate === todayDateStr) {
+                    sections.today.push(task);
+                } else if (taskDate === tomorrowDateStr) {
+                    sections.tomorrow.push(task);
+                } else if (taskDate > todayDateStr) {
+                    sections.upcoming.push(task);
+                } else if (taskDate < todayDateStr && task.status === 'pending') {
+                    // Overdue pending tasks go to today
+                    sections.today.push(task);
+                }
+            });
+
+            const createTaskCard = (task) => {
+                const taskCard = document.createElement('div');
+                taskCard.className = `task-card ${task.status === 'completed' ? 'completed' : ''}`;
+
+                const parts = task.due_date ? task.due_date.split(' ') : [];
+                const taskDate = parts[0] || '';
+                const taskTime = parts[1] ? parts[1].slice(0, 5) : '';
+
+                // Format date for display
+                let dateDisplay = taskDate;
+                if (taskDate === todayDateStr) dateDisplay = 'Today';
+                else if (taskDate === tomorrowDateStr) dateDisplay = 'Tomorrow';
+
+                taskCard.innerHTML = `
+                    <div class="checkbox ${task.status === 'completed' ? 'checked' : ''}" onclick="event.stopPropagation(); toggleTaskStatus(${task.id}, '${task.status}')"></div>
+                    <div class="task-content">
+                        <div class="task-title">${task.title}</div>
+                        <div class="task-description">${task.description}</div>
+                        <div style="font-size: 11px; color: #888;">${dateDisplay} ${taskTime !== '00:00' ? 'at ' + taskTime : ''}</div>
+                    </div>
+                    <span class="task-tag tag-${task.category}">${task.category.charAt(0).toUpperCase() + task.category.slice(1)}</span>
+                `;
+                return taskCard;
+            };
+
+            sections.today.forEach(task => todayTasks.appendChild(createTaskCard(task)));
+
+            if (sections.tomorrow.length > 0) {
+                const subTitle = document.createElement('h3');
+                subTitle.style.fontSize = '14px';
+                subTitle.style.margin = '10px 0';
+                subTitle.textContent = 'Tomorrow';
+                upcomingTasks.appendChild(subTitle);
+                sections.tomorrow.forEach(task => upcomingTasks.appendChild(createTaskCard(task)));
+            }
+
+            if (sections.upcoming.length > 0) {
+                const subTitle = document.createElement('h3');
+                subTitle.style.fontSize = '14px';
+                subTitle.style.margin = '10px 0';
+                subTitle.textContent = sections.tomorrow.length > 0 ? 'Later' : 'Upcoming';
+                upcomingTasks.appendChild(subTitle);
+                sections.upcoming.forEach(task => upcomingTasks.appendChild(createTaskCard(task)));
+            }
+
+            if (todayTasks.innerHTML === '') todayTasks.innerHTML = '<p style="color: #888; font-size: 13px;">No tasks for today.</p>';
+            if (upcomingTasks.innerHTML === '') upcomingTasks.innerHTML = '<p style="color: #888; font-size: 13px;">No upcoming tasks.</p>';
+
+            updateStats();
+        }
+
+        async function toggleTaskStatus(taskId, currentStatus) {
+            const newStatus = currentStatus === 'pending' ? 'completed' : 'pending';
+            try {
+                const response = await fetch('update_task_status.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ task_id: taskId, status: newStatus })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    const taskIndex = allTasksData.findIndex(t => t.id == taskId);
+                    if (taskIndex > -1) {
+                        allTasksData[taskIndex].status = newStatus;
+                        renderTasks(document.querySelector('.filter-btn.active').dataset.filter);
+                    }
+                }
+            } catch (error) {
+                console.error('Error updating task:', error);
+            }
+        }
+
+        // Update stats function
+        function updateStats() {
+            const completed = allTasksData.filter(t => t.status === 'completed').length;
+            const pending = allTasksData.filter(t => t.status === 'pending').length;
+
+            document.getElementById('completedCount').textContent = completed;
+            document.getElementById('pendingCount').textContent = pending;
+
+            // Velocity calculation (last 7 days completed tasks)
+            const sevenDaysAgo = new Date();
+            sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+            const priorityPoints = { 'high': 10, 'medium': 5, 'low': 2 };
+
+            let velocityPoints = 0;
+            allTasksData.forEach(task => {
+                if (task.status === 'completed' && task.completed_at) {
+                    const compDate = new Date(task.completed_at.replace(' ', 'T'));
+                    if (compDate >= sevenDaysAgo) {
+                        velocityPoints += (priorityPoints[task.priority] || 5);
+                    }
+                }
+            });
+
+            document.getElementById('velocityCount').textContent = velocityPoints + ' pts';
+        }
+
+        // Filter functionality
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                renderTasks(button.dataset.filter);
+            });
+        });
+
+        async function checkAuth() {
+            try {
+                const response = await fetch('check_auth.php');
+                const data = await response.json();
+
+                if (data.authenticated) {
+                    if (data.user && data.user.full_name) {
+                        document.getElementById('userNameDisplay').textContent = data.user.full_name + ' !!';
+                    }
+                    fetchTasks();
+                } else {
+                    window.location.href = 'logintask.html';
+                }
+            } catch (error) {
+                console.error('Auth check failed:', error);
+                window.location.href = 'logintask.html';
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+        });
+    </script>
+</body>
+
+</html>

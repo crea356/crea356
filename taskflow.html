@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TaskFlow - Productivity App</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    /* --- Basic Reset & Fonts --- */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Spline Sans', sans-serif; background: #EDF8E1; color: #101622; line-height: 1.5; }
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; display: block; }
+
+    /* --- Container --- */
+    .container { width: 90%; max-width: 1200px; margin: 0 auto; }
+
+    /* --- Header --- */
+    header { display: flex; flex-direction: column; align-items: center; gap: 20px; padding: 40px 0; text-align: center; }
+    header h1 { font-size: 2.5rem; color: #1F3D2B; }
+    header p { font-size: 1rem; color: #335545; margin-top: 10px; }
+    .hero-btn { background: #8BCF6A; color: #1F3D2B; padding: 12px 25px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 30px; width:27%;}
+
+    /* --- Navigation --- */
+    
+    nav h2 { font-size: 2.4rem; font-weight:bolder; display:inline-block;background: linear-gradient(185deg,#355627 0%,#a9ff7f 100% ); -webkit-background-clip:text; -webkit-text-fill-color: transparent;}
+    
+    /* --- Features --- */
+    .features { display: grid; grid-template-columns: 1fr; gap: 20px; margin: 50px 0; }
+    .feature { background: white; padding: 20px; border-radius: 10px; text-align: center; box-shadow: 0 3px 8px rgba(0,0,0,0.1); }
+    .feature h3 { font-size: 1.2rem; color: #367019; margin-bottom: 10px; }
+    .feature p { color: #555; }
+
+    /* --- Social Proof --- */
+    .social { display: flex; justify-content: center; gap: 10px; margin: 30px 0; }
+    .social img { width: 40px; height: 40px; border-radius: 50%; }
+
+    /* --- Footer --- */
+    footer { background: #101622; color: white; text-align: center; padding: 30px 0; }
+    footer a { color: #aaa; margin: 0 10px; font-size: 0.9rem; }
+
+    /* --- Responsive --- */
+    @media(min-width: 768px){
+      header { flex-direction: row; justify-content: space-between; text-align: left; padding: 60px 0; }
+      header h1 { font-size: 3rem; }
+      .features { grid-template-columns: repeat(3, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Navigation -->
+    <nav>
+      <h2>TaskFlow</h2>
+    </nav>
+
+    <!-- Hero -->
+    <header>
+      <div>
+        <h1>Organize Tasks & Boost Productivity</h1>
+        <p>Streamline your workflow with a tool designed for students, professionals, and teams to achieve more.</p>
+        <div class="hero-btn">
+        <a href="dashboard.html">Get Started Free</a> </div>
+      </div>
+      <div>
+        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDb_NqOpfbfJwepqu5y99nPZt-5HtGOdHYQZJ3Db7BsLFzDo7kBvlmnr8M6MShgRCPfTd0A8FxJPDGyiJIpfkD0cBP0r8qjcuwJ_5TviSs6Dj7B25SFM4JilCLOglG8ita7rHIsEnZr0I-mKPgVWXYFxaz3hyx3ZKnKbmcnkMNPe1JebMCCuqabGaL8ipe_TeYgi7dOL-yZqCPdNDrgKd9BTlDAIQyVWWGuufie9qQtAzGKnKH_1AyF2NqnT1oGxRKmDXsYhVY-9tzK" alt="Hero Image">
+      </div>
+    </header>
+
+    <!-- Features -->
+    <section class="features">
+      <div class="feature">
+        <h3>Smart Lists</h3>
+        <p>Auto-sort your day based on priority and deadlines so you never miss a beat.</p>
+      </div>
+      <div class="feature">
+        <h3>Team Sync</h3>
+        <p>Collaborate seamlessly with your team in real-time, assign tasks, and track progress.</p>
+      </div>
+      <div class="feature">
+        <h3>Focus Mode</h3>
+        <p>Eliminate distractions with a dedicated focus timer and minimal interface mode.</p>
+      </div>
+    </section>
+
+    <!-- Social Proof -->
+    <div class="social">
+      <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFevLOV8e_yULeCD2OQxhBtPKtQEZ_ZIM8Xkdb11o6lnZJ5tbJQDCOHsbInPskHAUWOyz0ZbSQnwLFqCD0kHusGwyuVauxXIapuoHWa7BTPSzY3ozvUylskmb1NWAu4LlDTitFSDBhAJoGjeipIayd937xm62JDw0H_iW2jVZe6G8S4meKjy4aVoPAvF_Svmj0KrlrhCYuLEGZ3wwABL0I1JpYZp2yYEhKwIgOHXEeKKFngEtR1W25r9PZx4gbB4RX_DZUfNtBxBvn" alt="User 1">
+      <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqNQsys_lfiQ5lpN-7ZYjYz3GmO-snWvsMayXLuhjCFUbPJE0BK5bdxB5NTyY2ysFzEJ8eYtak0HFoigfwDADEr82Kvvv8CMQK386gZovz2iEHc3PgrvpK3BSoPzjrgxfT41gSMmQDRU7Il1i9mkwDm6YNi9Ok3Ii9nmLISX4FfcC2cKXhOZASX5bl4pHvu8vHNw0fphdcpakxjITHk9Ven1t2Kqpep-2Go3gDgE5xCPndb0MRga7nbDZr3S-m7Qe9QY4GLbgNy7md" alt="User 2">
+      <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHrzvjYPKIR-mEJRWQss96H15hT2BKdsJJXRo-KQ_QFm54w6yEPD05VpQbSxOFIIthscxQawWSa41_Hn_H-ERl1rH2MfFu_Y9ARaYKVpI9LesvqWax-4Xfpd5qWs-rxzI0tefko14Ny_E6DXeiQQEgipu2Te7GDPsO7WOzQOmp13KmYoAYgI5QRMtzHA1X4Z5pvWGEPo4CfWh3f2ZGkuXRCox_nkxANMysBUC8xwpVKgXQ2SBMmxkcfNxqf-V6yOR40RQtRntneElJ" alt="User 3">
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <p>Trusted by 10,000+ productive people</p>
+      <div>
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="#">Support</a>
+      </div>
+      <p>© 2025 TaskFlow Inc.</p>
+    </footer>
+  </div>
+</body>
+</html>
